@@ -5,31 +5,41 @@ export const UsuariosContext = createContext()
 
 const UsersContext = ({ children }) => {
     const [users, setUsers] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
+
+
+    const getUsers = async () => {
+        try {
+            const response = await axios.get("http://localhost:8000/usuarios")
+            setUsers(response.data)
+        }
+        catch (error) {
+            console.error("Error fetching users:", error.message)
+        }
+    }
+
+    const deleteUser = async (id) => {
+        try {
+            await axios.delete(`http://localhost:8000/usuarios/${id}`)
+            await getUsers();
+        }
+        catch (error) {
+            console.error("Error deleting user:", error.message)
+        }
+    }
+
 
     useEffect(() => {
-        const obtenerUsuarios = async () => {
-            try {
-                setLoading(true)
-                setError(null)
-                const response = await axios.get('http://localhost:8000/usuarios')
-                setUsers(response.data)
-            } catch (error) {
-                setError(error.message)
-            }
-        }
-        obtenerUsuarios()
+        getUsers()
     }, [])
 
-    console.log(users, "usuarios")
+
 
     return (
         <UsuariosContext.Provider
             value={{
                 users,
-                loading,
-                error
+                getUsers,
+                deleteUser
             }}
         >
             {children}

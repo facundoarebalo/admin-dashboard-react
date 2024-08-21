@@ -26,6 +26,7 @@ const UsersContext = ({ children }) => {
             console.error("Error deleting user:", error.message)
         }
     }
+    
 
 
     useEffect(() => {

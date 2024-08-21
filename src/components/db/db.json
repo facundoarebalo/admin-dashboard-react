@@ -1,3 +1,40 @@
 {
-  "usuarios": []
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "John Doe",
+      "apellido": "Smith",
+      "email": "john.doe@example.com"
+    },
+    {
+      "id": 2,
+      "nombre": "Jane Smith",
+      "apellido": "Johnson",
+      "email": "jane.smith@example.com"
+    },
+    {
+      "id": 3,
+      "nombre": "Bob Johnson",
+      "apellido": "Doe",
+      "email": "bob.johnson@example.com"
+    },
+    {
+      "id": 4,
+      "nombre": "Alice Johnson",
+      "apellido": "Smith",
+      "email": "alice.johnson@example.com"
+    },
+    {
+      "id": 5,
+      "nombre": "David Johnson",
+      "apellido": "Williams",
+      "email": "david.johnson@example.com"
+    },
+    {
+      "id": 6,
+      "nombre": "Emily Johnson",
+      "apellido": "Brown",
+      "email": "emily.johnson@example.com"
+    }
+  ]
 }

@@ -1,6 +1,6 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { UsuariosContext } from "../../context/UsersContext"
-import { Table } from "react-bootstrap"
+import { Table, Modal, Button, Form } from "react-bootstrap"
 import { MdDelete, MdEdit } from "react-icons/md";
 import './uTable.css'
 
@@ -16,6 +16,10 @@ const UserTable = () => {
         console.log(`Usuario con id ${id} eliminado`)
 
     }
+    // const [show, setShow] = useState(false);
+    // const handleClose = () => setShow(false);
+    // const handleShow = () => setShow(true);
+
 
     return (
         <>
@@ -40,7 +44,10 @@ const UserTable = () => {
                                 <td>{users.email}</td>
                                 <td>
                                     <button onClick={() => handleDeleteUser(users.id)}><MdDelete /></button>
-                                    <button onClick={() => handleEditUser(users)}><MdEdit />
+                                    <button onClick={() =>
+                                        handleShow()
+
+                                    }><MdEdit />
                                     </button>
                                 </td>
                             </tr>
@@ -49,6 +56,32 @@ const UserTable = () => {
                 </Table>
             )
             }
+
+            {/* <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Editar usuario</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleEditUser}>
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control type="email" placeholder="Ingrese email" />
+                        </Form.Group>
+                        <Form.Group controlId="formBasicPassword">
+                            <Form.Label>Contraseña</Form.Label>
+                            <Form.Control type="password" placeholder="Ingrese contraseña" />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">
+                            Guardar cambios
+                        </Button>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cerrar
+                    </Button>
+                </Modal.Footer>
+            </Modal> */}
         </>
     )
 }

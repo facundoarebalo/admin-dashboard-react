@@ -26,7 +26,17 @@ const UsersContext = ({ children }) => {
             console.error("Error deleting user:", error.message)
         }
     }
-    
+
+    const addUser = async (user) => {
+        try {
+            await axios.post("http://localhost:8000/usuarios", user)
+            await getUsers();
+        }
+        catch (error) {
+            console.error("Error adding user:", error.message)
+        }
+    }
+
 
 
     useEffect(() => {
@@ -40,7 +50,8 @@ const UsersContext = ({ children }) => {
             value={{
                 users,
                 getUsers,
-                deleteUser
+                deleteUser,
+                addUser
             }}
         >
             {children}

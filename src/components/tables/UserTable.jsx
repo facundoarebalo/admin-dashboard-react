@@ -7,19 +7,22 @@ import FormReg from "../form/FormReg";
 
 
 const UserTable = () => {
-
     const { users, deleteUser } = useContext(UsuariosContext)
-    const handleEditUser = () => {
-        console.log("Editando usuario")
+    const [show, setShow] = useState(false);
+    const [editarUser, setEditarUser] = useState(null)
+
+    const handleClose = () => setShow(false);
+
+    const handleEdit = (users) => {
+        setEditarUser(users)
+        setShow(true)
+
     }
     const handleDeleteUser = (id) => {
         deleteUser(id)
-        console.log(`Usuario con id ${id} eliminado`)
 
     }
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+
 
 
     return (
@@ -47,10 +50,7 @@ const UserTable = () => {
                                 <td>{users.email}</td>
                                 <td>
                                     <button onClick={() => handleDeleteUser(users.id)}><MdDelete /></button>
-                                    <button onClick={() =>
-                                        handleShow()
-
-                                    }><MdEdit />
+                                    <button onClick={() => handleEdit(users)}><MdEdit />
                                     </button>
                                 </td>
                             </tr>
@@ -65,13 +65,8 @@ const UserTable = () => {
                     <Modal.Title>Editar usuario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {/* <FormReg /> */}
+                    <FormReg editarUser={editarUser} handleClose={handleClose} />
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Cerrar
-                    </Button>
-                </Modal.Footer>
             </Modal>
         </>
     )

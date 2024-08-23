@@ -37,6 +37,16 @@ const UsersContext = ({ children }) => {
         }
     }
 
+    const editUser = async (user) => {
+        try {
+            await axios.put(`http://localhost:8000/usuarios/${user.id}`, user)
+            await getUsers();
+        }
+        catch (error) {
+            console.error("Error editing user:", error.message)
+        }
+    }
+
 
 
     useEffect(() => {
@@ -51,7 +61,8 @@ const UsersContext = ({ children }) => {
                 users,
                 getUsers,
                 deleteUser,
-                addUser
+                addUser,
+                editUser
             }}
         >
             {children}

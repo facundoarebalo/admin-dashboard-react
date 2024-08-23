@@ -1,25 +1,47 @@
 import { useContext, useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
-import './formStyle.css'
 import { UsuariosContext } from '../../context/UsersContext'
+import { MdEdit } from "react-icons/md";
+import './formStyle.css'
 
-const FormReg = () => {
+const FormReg = (editarUser, handleClose) => {
 
-    const { users, addUser } = useContext(UsuariosContext)
+    const { addUser, editUser } = useContext(UsuariosContext)
 
-    const [nombre, setNombre] = useState('')
-    const [apellido, setApellido] = useState('')
-    const [email, setEmail] = useState('')
+    const [usuario, setUsuario] = useState({
+        nombre: editarUser ? editarUser.nombre : "",
+        apellido: editarUser ? editarUser.apellido : "",
+        email: editarUser ? editarUser.email : "",
+    });
+    const handleChange = (e) => {
+        setUsuario({ ...usuario, [e.target.name]: e.target.value });
+
+    };
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log(nombre, apellido, email)
-        setNombre('')
-        setApellido('')
-        setEmail('')
-        addUser({ nombre, apellido, email })
+        e.preventDefault();
 
-    }
+        if (editarUser) {
+            editUser(usuario);
+
+            handleClose();
+
+            setUsuario({
+                nombre: "",
+                apellido: "",
+                email: "",
+            });
+        } else {
+            addUser(usuario);
+            setUsuario({
+                nombre: "",
+                apellido: "",
+                email: "",
+            });
+        }
+    };
+
+
     return (
         <>
             <Form className="formulario-usuarios" onSubmit={handleSubmit}>
@@ -29,9 +51,9 @@ const FormReg = () => {
                     <Form.Control
                         type="text"
                         placeholder="Ingrese nombre"
-                        value={nombre}
+                        value={usuario.nombre}
                         required
-                        onChange={(e) => setNombre(e.target.value)}
+                        onChange={handleChange}
                         minLength={4}
                         maxLength={12}
                     />
@@ -42,9 +64,9 @@ const FormReg = () => {
                     <Form.Control
                         type="text"
                         placeholder="Ingrese apellido"
-                        value={apellido}
+                        value={usuario.apellido}
                         required
-                        onChange={(e) => setApellido(e.target.value)}
+                        onChange={handleChange}
                         minLength={4}
                         maxLength={12}
 
@@ -56,18 +78,24 @@ const FormReg = () => {
                     <Form.Control
                         type="email"
                         placeholder="Ingrese email"
-                        value={email}
+                        value={usuario.email}
                         required
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={handleChange}
                         maxLength={35}
                     />
                 </Form.Group>
 
-                <Button className='mt-3 btn-usuarios' variant="primary" type="submit">
-                    Agregar Usuario
-                </Button>
-
-
+                {editUser ? (
+                    <Button type="submit" variant="warning">
+                        {" "}
+                        Editar Usuario
+                    </Button>
+                ) : (
+                    <Button type="submit" variant="success">
+                        {" "}
+                        Enviar Registro
+                    </Button>
+                )}
             </Form>
         </>
     )

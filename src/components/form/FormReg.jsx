@@ -1,57 +1,67 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { UsuariosContext } from '../../context/UsersContext'
-import { MdEdit } from "react-icons/md";
+import { v4 as uuidv4 } from 'uuid'
 import './formStyle.css'
 
-const FormReg = (editarUser, handleClose) => {
-
+const FormReg = ({ editarUser, handleClose, setShow }) => {
     const { addUser, editUser } = useContext(UsuariosContext)
+    const [user, setUser] = useState({
+        id: "",
+        nombre: "",
+        apellido: "",
+        email: ""
+    })
 
-    const [usuario, setUsuario] = useState({
-        nombre: editarUser ? editarUser.nombre : "",
-        apellido: editarUser ? editarUser.apellido : "",
-        email: editarUser ? editarUser.email : "",
-    });
+    useEffect(() => {
+        if (editarUser) {
+            setUser(editarUser)
+        } else {
+            setUser(prevUser => ({ ...prevUser, id: uuidv4() }))
+        }
+    }, [editarUser])
+
     const handleChange = (e) => {
-        setUsuario({ ...usuario, [e.target.name]: e.target.value });
-
-    };
+        setUser({ ...user, [e.target.name]: e.target.value })
+    }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         if (editarUser) {
-            editUser(usuario);
-
-            handleClose();
-
-            setUsuario({
-                nombre: "",
-                apellido: "",
-                email: "",
-            });
+            editUser(user)
+            handleClose()
         } else {
-            addUser(usuario);
-            setUsuario({
-                nombre: "",
-                apellido: "",
-                email: "",
-            });
+            const nuevoUsuario = { ...user, id: user.id || uuidv4() }
+            addUser(nuevoUsuario)
         }
-    };
+
+        setUser({
+            id: uuidv4(), // Generamos una nueva ID para el próximo usuario
+            nombre: "",
+            apellido: "",
+            email: ""
+        })
+
+        if (setShow) setShow(false)
+    }
+
+
+
+
+
 
 
     return (
         <>
             <Form className="formulario-usuarios" onSubmit={handleSubmit}>
-
                 <Form.Group controlId="formBasicName">
                     <Form.Label>Nombre</Form.Label>
                     <Form.Control
                         type="text"
                         placeholder="Ingrese nombre"
-                        value={usuario.nombre}
+                        value={user.nombre}
+                        name='nombre'
                         required
                         onChange={handleChange}
                         minLength={4}
@@ -64,7 +74,8 @@ const FormReg = (editarUser, handleClose) => {
                     <Form.Control
                         type="text"
                         placeholder="Ingrese apellido"
-                        value={usuario.apellido}
+                        value={user.apellido}
+                        name='apellido'
                         required
                         onChange={handleChange}
                         minLength={4}
@@ -78,24 +89,16 @@ const FormReg = (editarUser, handleClose) => {
                     <Form.Control
                         type="email"
                         placeholder="Ingrese email"
-                        value={usuario.email}
+                        value={user.email}
+                        name='email'
                         required
                         onChange={handleChange}
                         maxLength={35}
                     />
                 </Form.Group>
-
-                {editUser ? (
-                    <Button type="submit" variant="warning">
-                        {" "}
-                        Editar Usuario
-                    </Button>
-                ) : (
-                    <Button type="submit" variant="success">
-                        {" "}
-                        Enviar Registro
-                    </Button>
-                )}
+                <Button type="submit" variant={editarUser ? "warning" : "success"}>
+                    {editarUser ? "Editar Usuario" : "Enviar Registro"}
+                </Button>
             </Form>
         </>
     )

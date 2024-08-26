@@ -1,6 +1,6 @@
 import { useContext, useState } from "react"
 import { UsuariosContext } from "../../context/UsersContext"
-import { Table, Modal, Button, Form } from "react-bootstrap"
+import { Table, Modal } from "react-bootstrap"
 import { MdDelete, MdEdit } from "react-icons/md";
 import './uTable.css'
 import FormReg from "../form/FormReg";
@@ -13,16 +13,11 @@ const UserTable = () => {
 
     const handleClose = () => setShow(false);
 
-    const handleEdit = (users) => {
-        setEditarUser(users)
+    const handleEdit = (user) => {
+        setEditarUser(user)
         setShow(true)
 
     }
-    const handleDeleteUser = (id) => {
-        deleteUser(id)
-
-    }
-
 
 
     return (
@@ -43,15 +38,15 @@ const UserTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((users) => (
-                            <tr key={users.id}>
-                                <td>{users.id}</td>
-                                <td>{users.nombre}</td>
-                                <td>{users.email}</td>
+                        {users.map((user) => (
+                            <tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td>{user.nombre}</td>
+                                <td>{user.apellido}</td>
+                                <td>{user.email}</td>
                                 <td>
-                                    <button onClick={() => handleDeleteUser(users.id)}><MdDelete /></button>
-                                    <button onClick={() => handleEdit(users)}><MdEdit />
-                                    </button>
+                                    <button onClick={() => handleEdit(user)}><MdEdit /> </button>
+                                    <button onClick={() => deleteUser(user.id)}><MdDelete /></button>
                                 </td>
                             </tr>
                         ))}
@@ -62,10 +57,14 @@ const UserTable = () => {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Editar usuario</Modal.Title>
+                    <Modal.Title>{editarUser ? "Editar usuario" : "Agregar usuario"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <FormReg editarUser={editarUser} handleClose={handleClose} />
+                    <FormReg
+                        editarUser={editarUser}
+                        handleClose={handleClose}
+                        setShow={setShow}
+                    />
                 </Modal.Body>
             </Modal>
         </>
